@@ -86,6 +86,9 @@ pub fn copy_file_if_needed(src: &Path, dest: &Path, hard_link: bool) -> Result<(
     }
 
     if hard_link {
+        if Path::new(&dest).is_file() {
+            std::fs::remove_file(dest)?;
+        }
         std::fs::hard_link(src, dest)?
     } else {
         let src_metadata = metadata(src)
